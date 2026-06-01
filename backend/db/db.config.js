@@ -7,7 +7,6 @@ const db = mysql.createPool({
   database: process.env.DB_DATABASE,
   port: process.env.DB_PORT || 3306,
 });
-
 async function initDB() {
   try {
     await db.query(`
@@ -15,6 +14,7 @@ async function initDB() {
         id INT AUTO_INCREMENT PRIMARY KEY,
         role VARCHAR(50) NOT NULL,
         content TEXT NOT NULL,
+        token_count INT DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
