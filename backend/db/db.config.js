@@ -7,6 +7,7 @@ const db = mysql.createPool({
   database: process.env.DB_DATABASE,
   port: process.env.DB_PORT || 3306,
 });
+
 async function initDB() {
   try {
     await db.query(`
@@ -18,6 +19,12 @@ async function initDB() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
+
+    await db.query(`
+      ALTER TABLE conversations 
+      ADD COLUMN IF NOT EXISTS token_count INT DEFAULT 0
+    `);
+
     console.log("Table ready!");
   } catch (error) {
     console.error("DB init error:", error.message);
