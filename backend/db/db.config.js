@@ -8,4 +8,22 @@ const db = mysql.createPool({
   port: process.env.DB_PORT || 3306,
 });
 
+async function initDB() {
+  try {
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS conversations (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        role VARCHAR(50) NOT NULL,
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    console.log("Table ready!");
+  } catch (error) {
+    console.error("DB init error:", error.message);
+  }
+}
+
+initDB();
+
 export default db;
