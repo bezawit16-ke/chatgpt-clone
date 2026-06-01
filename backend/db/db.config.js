@@ -20,10 +20,17 @@ async function initDB() {
       )
     `);
 
-    await db.query(`
+    // ✅ safe way to add column
+    await db
+      .query(
+        `
       ALTER TABLE conversations 
-      ADD COLUMN IF NOT EXISTS token_count INT DEFAULT 0
-    `);
+      ADD COLUMN token_count INT DEFAULT 0
+    `,
+      )
+      .catch(() => {
+        console.log("token_count column already exists, skipping...");
+      });
 
     console.log("Table ready!");
   } catch (error) {
